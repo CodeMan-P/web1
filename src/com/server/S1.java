@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Random;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +14,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class S1 extends HttpServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 		 * Constructor of the object.
 		 */
@@ -74,15 +77,6 @@ public class S1 extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		int n = Integer.parseInt(request.getParameter("n"));
 		System.out.println(n);
-//		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
-//		out.println("<HTML>");
-//		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
-//		out.println("  <BODY>");
-//		out.print("    This is ");
-//		out.print(this.getClass());
-//		out.println(", using the POST method");
-//		out.println("  </BODY>");
-//		out.println("</HTML>");
 		out.write(getJson(n));
 		out.flush();
 		out.close();

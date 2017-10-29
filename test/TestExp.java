@@ -1,5 +1,3 @@
-package com.testPack;
-
 import java.awt.Point;
 import java.util.LinkedList;
 
