@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
-
+import java.util.LinkedList;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -16,6 +16,11 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * 2017年10月30日19:38:58
+ * @author lenovo
+ *
+ */
 public class PoiForExcel {
 
 	static String PATH = System.getProperty("user.dir") + File.separatorChar + "data" + File.separatorChar
@@ -23,17 +28,19 @@ public class PoiForExcel {
 
 	public static void main(String[] args) {
 		showXsheet();
-		System.exit(0);
 	}
-
+	public static void setPath(String path){
+		PATH = path;
+	}
 	public static void showXsheet() {
 		File file = new File(PATH);
 		XSSFWorkbook hwb = null;
 		XSSFSheet hst;
 		Row row = null;
 		try {
-			if(!file.exists())
-				System.out.println(file.getAbsolutePath()+"\n文件不存在");
+			if(!file.exists()){
+				System.out.println(file.getAbsolutePath()+"\n文件不存在");				
+			}
 			
 			hwb = new XSSFWorkbook(file);
 			int num = hwb.getNumberOfSheets();
@@ -80,8 +87,9 @@ public class PoiForExcel {
 		FileInputStream fis = null;
 		FileOutputStream fos = null;
 		try {
-			if(!file.exists())
-				file.createNewFile();
+			if(!file.exists()){
+				file.createNewFile();				
+			}
 			fis = new FileInputStream(file);
 			hwb = new XSSFWorkbook(fis);
 			fis.close();
@@ -110,7 +118,44 @@ public class PoiForExcel {
 			}
 		}
 	}
-
+	/**
+	 * 
+	 */
+	public static synchronized LinkedList<Points> getXcol(int col,int col2,int sheet) {
+		File file = new File(PATH);
+		XSSFWorkbook hwb = null;
+		XSSFSheet hst;
+		LinkedList<Points> list = new LinkedList<Points>();
+		try {
+			hwb = new XSSFWorkbook(file);
+			hst = hwb.getSheetAt(sheet);
+			Iterator<Row> it = hst.iterator();
+			Row row = null;
+			double x,y;
+			while(it.hasNext()){
+				row = it.next();
+				try{
+					x = row.getCell(col).getNumericCellValue();
+					y = row.getCell(col2).getNumericCellValue();
+					list.add(new Points(x,y));	
+				}catch(Exception e){
+					System.out.println("(c1,c2,sheet):"+col+col2+sheet+"超出范围");
+					break;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (hwb != null) {
+					hwb.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
 	/**
 	 * 
 	 */
@@ -127,8 +172,9 @@ public class PoiForExcel {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (hwb != null)
+				if (hwb != null) {
 					hwb.close();
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -154,10 +200,12 @@ public class PoiForExcel {
 			e.printStackTrace();
 		} finally {
 			try {
-				if (hwb != null)
+				if (hwb != null) {
 					hwb.close();
-				if (pf != null)
+				}
+				if (pf != null) {
 					pf.close();
+				}
 
 			} catch (IOException e) {
 				e.printStackTrace();
